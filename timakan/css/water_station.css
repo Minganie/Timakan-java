@@ -1,0 +1,30 @@
+body, html {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	font-size: 1em;
+    position: relative;
+}
+body {
+    padding: 0 19px 0 0;
+}
+* {
+	padding: 0;
+	margin: 0;
+}
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.timakan_chart {
+    margin: 2em 0;
+}
+h1 {
+    padding: 1em;
+    color: #564787;
+}
+h2 {
+    margin: 0 1em 1em 1em;
+    color: #1d6b6e;
+}

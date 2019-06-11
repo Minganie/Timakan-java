@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="97.571968"
+   height="97.571968"
+   viewBox="0 0 97.571968 97.571968"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="water.svg"
+   inkscape:export-filename="C:\Users\Myriam\Documents\Timakan\timakan\icons\water.png"
+   inkscape:export-xdpi="95.437248"
+   inkscape:export-ydpi="95.437248"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#b4b4b4"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     id="namedview12"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="4.72"
+     inkscape:cx="21.672429"
+     inkscape:cy="24.551249"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <g
+     id="g8"
+     transform="translate(-2.3908113,-1.1729616)">
+    <g
+       transform="matrix(0.69,0,0,0.69,15.5,15.5)"
+       style="fill:#ffffff"
+       id="g6">
+      <svg
+         version="1.1"
+         x="0px"
+         y="0px"
+         viewBox="0 0 100 100"
+         enable-background="new 0 0 100 100"
+         xml:space="preserve"
+         id="svg4"
+         width="100%"
+         height="100%"
+         style="fill:#ffffff"><path
+           d="m 53.49,12.725 -1.785,-7.76 -1.785,7.76 c -7.108,19.816 -26.144,31.443 -26.144,54.272 0,11.739 7.268,21.742 17.508,25.866 0.256,0.088 0.535,0.151 0.791,0.236 1.358,0.515 2.735,0.98 4.19,1.263 1.762,0.359 3.57,0.554 5.44,0.554 1.871,0 3.676,-0.194 5.441,-0.554 1.453,-0.282 2.832,-0.748 4.188,-1.263 0.256,-0.085 0.537,-0.148 0.793,-0.236 C 72.367,88.739 79.635,78.736 79.635,66.997 79.635,44.168 60.6,32.541 53.49,12.725 Z m -1.785,76.568 c -1.775,0 -3.207,-1.432 -3.207,-3.206 0,-1.774 1.432,-3.203 3.207,-3.203 9.318,0 16.898,-7.591 16.898,-16.889 0,-1.777 1.434,-3.21 3.205,-3.21 1.775,0 3.209,1.433 3.209,3.21 0.001,12.847 -10.454,23.298 -23.312,23.298 z"
+           id="path2"
+           inkscape:connector-curvature="0" /></svg>    </g>
+  </g>
+  <circle
+     style="clip-rule:evenodd;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.56157041;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+     id="path1476"
+     cx="48.785984"
+     cy="48.785984"
+     r="47.505199" />
+</svg>

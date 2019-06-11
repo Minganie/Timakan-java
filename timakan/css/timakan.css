@@ -1,0 +1,86 @@
+body, html {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	font-size: 1em;
+    position: relative;
+}
+* {
+	padding: 0;
+	margin: 0;
+}
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: #101935;
+    color: #f2fdff;
+}
+header {
+    padding: 1em;
+}
+.wrapper {
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+}
+#map {
+    height: 100%;
+}
+footer {
+    font-size: 0.7em;
+}
+footer p {
+    margin: 0.7em;
+}
+header, footer {
+}
+header, main, footer {
+    flex-shrink: 0;
+}
+.gauche {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.droite {
+    width: 30%;
+}
+.droite table {
+    margin: 1em;
+    border-collapse:collapse;
+}
+.droite table td,
+.droite table th {
+    padding: 0.5em 0;
+}
+.droite table td:last-child,
+.droite table th:last-child {
+    padding: 0 0.5em 0 0;
+}
+.droite table td:first-child,
+.droite table th:first-child {
+    padding: 0 0 0 0.5em;
+}
+table>tbody>tr:nth-child(odd) {
+    background-color: #202945;
+}
+table a {
+    color: #f2fdff;
+}
+table a:visited {
+    color: #dbcdb8;
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background-color: #dbcbd8;
+}
+.leaflet-popup-content-wrapper a {
+    color: #101935;
+}

@@ -1,0 +1,247 @@
+body, html {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: rgb(29, 38, 72);
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1em;
+  position: relative;
+}
+html * {
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.block h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  position: relative;
+}
+/* ------------------ HEADER ------------------ */
+header {
+  display: flex;
+  align-items: flex-end;
+  background: url('../icons/waves.png') 34px 46px/60px 38px no-repeat;
+}
+header a {
+  text-decoration: none;
+  color: inherit;
+}
+header div.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 496px;
+  width: 100%;
+  background: url('../icons/river.jpg') center/cover;
+  opacity: 0.4;
+  z-index: 0;
+}
+header > div,
+header > a {
+  height: 496px;
+  border-bottom: 1px solid white;
+  flex: 1 1 33%;
+}
+header h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 22px;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: 80px;
+  left: 46px;
+}
+header h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  position: relative;
+  font-weight: lighter;
+}
+header .block {
+  text-align: center;
+  z-index: 1;
+}
+header .block.full {
+  height: 361px;
+  border-bottom: 1px solid white;
+}
+header .block.full.title {
+  text-align: left;
+}
+header .block.full.title h2 {
+  display: none;
+}
+header .block.full.station {
+  background: url('../icons/water.png') center 140px/47px 47px no-repeat,
+              url('../icons/arrow.png') center 278px/29px 27px no-repeat;
+  background-color: rgba(10, 207, 151, 0.4);
+  border: 1px solid white;
+}
+header .block.full h2 {
+  top: 203px;
+}
+header .block.full h3 {
+  top: 212px;
+}
+header .block.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+header .block.half {
+  height: 180px;
+  border: 1px solid white;
+}
+header .block.half h2 {
+  top: 102px;
+}
+header .block.half h3 {
+  top: 114px;
+}
+header .block.half.station {
+  background: url('../icons/meteo.png') center 32px/47px 47px no-repeat,
+              url('../icons/arrow.png') right 56px bottom 20px/29px 27px no-repeat;
+  background-color: rgba(45, 121, 171, 0.4);
+}
+header .block.half.camera {
+  background: url('../icons/camera.png') center 32px/47px 47px no-repeat,
+              url('../icons/arrow.png') right 56px bottom 20px/29px 27px no-repeat;
+  background-color: rgba(51, 24, 167, 0.4);
+}
+/* ------------------ MAP AND TABLE ------------------ */
+.leaflet-control-layers-expanded img {
+  margin: 0 3px;
+}
+#map_section {
+  min-height: 700px;
+  border-bottom: 1px solid white;
+}
+#map_section h2 {
+  font-family: 'Roboto', sans-serif;
+  background: url('../icons/station.png') 46px 45px/50px 50px no-repeat;
+  margin: 0;
+  padding: 0 0 0 107px;
+  line-height: 120px;
+  font-size: 18px;
+}
+#map_section > div {
+  display: flex;
+}
+#map {
+  height: 100%;
+  min-height: 452px;
+  flex: 2 0 60%;
+}
+#map_section > div > div:nth-child(2) {
+  padding: 0 2em 0 2em;
+  flex: 1 0 39%;
+}
+#map_section table {
+  border: 0;
+  border-collapse: collapse;
+}
+#map_section table a {
+  color: #a29bee;
+}
+#map_section table td, #map_section th {
+  padding: 0.2em 0.75em 0.2em 0.75em;
+  text-align: center;
+}
+#map_section table thead {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#map_section table tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#map_section footer {
+  display: table;
+  padding: 32px;
+  height: 128px;
+  font-size: 10px;
+}
+#map_section footer p {
+  display: table-cell;
+  vertical-align: middle;
+}
+/* ------------------ QUAKE AND TIDE ------------------ */
+#quake_section {
+  height: 520px;
+  display: flex;
+}
+#quake_section a {
+  text-decoration: none;
+  color: inherit;
+}
+#quake {
+  flex: 1 0 33%;
+  height: 100%;
+  background: url('../icons/arrow.png') right 40px bottom 167px/29px 27px  no-repeat,
+  rgba(255, 150, 58, 1);
+}
+#quake h2 {
+  position: relative;
+  top: 172px;
+  text-align: center;
+}
+#tide {
+  flex: 2 0 66%;
+}
+#tide h2 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  background: url('../icons/tide.png') 39px 12px/50px 40px no-repeat;
+  margin: 0;
+  padding: 0 0 0 97px;
+  line-height: 93px;
+  font-size: 18px;
+}
+#tide_graph {
+  width: 100%;
+  height: 320px;
+  padding: 0 2em;
+}
+#tide_graph > div {
+  width: 100%;
+  height: 100%;
+}
+/* ------------------ FOOTER ------------------ */
+body > footer {
+  height: 132px;
+}
+body > footer > div:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 132px;
+  width: 100%;
+  background: url('../icons/river.jpg') bottom/cover;
+  opacity: 0.4;
+  z-index: -1;
+}
+body > footer div.dot {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  margin: 27px 0 0 64px;
+  display: inline-block;
+}
+body > footer div.dot:nth-child(1) {
+    background: url('../icons/bsp.png') center no-repeat, white;
+    background-size: 70px;
+}
+body > footer div.dot:nth-child(2) {
+    background: url('../icons/stu.png') center no-repeat, white;
+    background-size: 70px;
+}
+body > footer div.dot:nth-child(3) {
+    background: url('../icons/obvcm.jpg') center no-repeat, white;
+    background-size: 70px;
+}

@@ -1,0 +1,14 @@
+com\hydrometeocharlevoix\timakan\Private$dbBag.class
+com\hydrometeocharlevoix\timakan\Private.class
+com\hydrometeocharlevoix\timakan\BadTimezoneException.class
+com\hydrometeocharlevoix\timakan\Repeater.class
+com\hydrometeocharlevoix\timakan\Main.class
+com\hydrometeocharlevoix\timakan\Main$1.class
+com\hydrometeocharlevoix\timakan\Report.class
+com\hydrometeocharlevoix\timakan\Reparser.class
+com\hydrometeocharlevoix\timakan\Observation.class
+com\hydrometeocharlevoix\timakan\UnknownStationException.class
+com\hydrometeocharlevoix\timakan\MainTest.class
+com\hydrometeocharlevoix\timakan\BadTimeUnit.class
+com\hydrometeocharlevoix\timakan\BadSensorConfiguration.class
+com\hydrometeocharlevoix\timakan\Private$emailLoginBag.class

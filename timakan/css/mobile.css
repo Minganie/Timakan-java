@@ -1,0 +1,212 @@
+body, html {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: #3b393b;
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1em;
+  position: relative;
+}
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+/* ------------------ HEADER ------------------ */
+header a {
+  text-decoration: none;
+  color: inherit;
+}
+header div.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 885px;
+  width: 100%;
+  background: url('../icons/river.jpg') center/cover;
+  opacity: 0.4;
+}
+header > div,
+header > a {
+  display: block;
+  height: 885px;
+  border-bottom: 1px solid white;
+  position: relative;
+}
+header h1 {
+  font-family: 'Roboto', sans-serif;
+  padding: 1.5em 0 1em 44px;
+}
+header h2 {
+  font-family: 'Roboto', sans-serif;
+  padding: 0 0 0 44px
+}
+header h3 {
+  
+}
+header .block {
+  height: 295px;
+  text-align: center;
+}
+header .block.full {
+  width: 100%;
+}
+header .block.full.title {
+  text-align: left;
+}
+header .block.full.station {
+  background: url('../icons/water.png') center top 29px/97px 97px no-repeat;
+  background-color: rgba(10, 207, 151, 0.4);
+}
+header .block.full.station h2,
+header .block.half h2 {
+  position: relative;
+  top: 150px;
+  padding: 0;
+}
+header .block.full.station h3,
+header .block.half h3 {
+  position: relative;
+  top: 170px;
+}
+header .block.wrapper {
+  display: flex;
+}
+header .block.half {
+  flex: 1 0 50%;
+}
+header .block.half.station {
+  background: url('../icons/meteo.png') center top 29px/97px 97px no-repeat;
+  background-color: rgba(45, 121, 171, 0.4);
+}
+header .block.half.station h2 {
+  position: relative;
+  top: 150px;
+  padding: 0;
+}
+header .block.half.camera {
+  background: url('../icons/camera.png') center top 29px/97px 97px no-repeat;
+  background-color: rgba(51, 24, 167, 0.4);
+}
+/* ------------------ MAP AND TABLE ------------------ */
+.leaflet-control-layers-expanded img {
+  margin: 0 3px;
+}
+#map_section h2 {
+  height: 117px;
+  display: table-cell;
+  vertical-align: middle;
+  font-family: 'Roboto', sans-serif;
+  background: url('../icons/station.png') 42px 35px/50px 52px no-repeat;
+  margin: 0;
+  padding: 0 0 0 114px;
+}
+#map {
+  width: 100%;
+  height: 424px;
+  margin-bottom: 1em;
+}
+#map_section table {
+  border: 0;
+  border-collapse: collapse;
+}
+#map_section table a {
+  color: #a29bee;
+}
+#map_section table td, #map_section th {
+  padding: 0.2em 0.75em 0.2em 0.75em;
+  text-align: center;
+}
+#map_section table td:first-child {
+  text-align: left;
+}
+#map_section table thead {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#map_section table tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#map_section footer {
+  display: table;
+  padding: 16px;
+  font-size: 10px;
+}
+#map_section footer p {
+  display: table-cell;
+  vertical-align: middle;
+}
+/* ------------------ QUAKE AND TIDE ------------------ */
+#quake {
+  height: 415px;
+  background: url('../icons/arrow.png') right 40px bottom 140px/29px 27px  no-repeat;
+  background-color: #ff9539;
+}
+#quake_section a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+#quake h2 {
+  position: relative;
+  top: 174px;
+  text-align: center;
+}
+#quake h2 > img {
+  position: relative;
+  top: 14px;
+  left: 5px;
+}
+#tide h2 {
+  height: 160px;
+  display: table-cell;
+  vertical-align: middle;
+  font-family: 'Roboto', sans-serif;
+  background: url('../icons/tide.png') 44px 44px/85px 68px no-repeat;
+  margin: 0;
+  padding: 0 0 0 155px;
+}
+#tide_graph {
+  width: 100%;
+  height: 424px;
+}
+body > footer {
+  height: 160px;
+  overflow: hidden;
+}
+body > footer > div:first-child {
+  height: 160px;
+}
+body > footer > div.overlay {
+  position: relative;
+  top: -200px;
+  height: 200px;
+  width: 100%;
+  background: url('../icons/river.jpg') bottom no-repeat;
+  opacity: 0.4;
+  z-index: -1;
+}
+body > footer div.dot {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background-color: white;
+  margin: 42px 0 0 32px;
+  display: inline-block;
+}
+body > footer div.dot:nth-child(1) {
+    background: url('../icons/bsp.png') center no-repeat, white;
+    background-size: 70px;
+}
+body > footer div.dot:nth-child(2) {
+    background: url('../icons/stu.png') center no-repeat, white;
+    background-size: 70px;
+}
+body > footer div.dot:nth-child(3) {
+    background: url('../icons/obvcm.jpg') center no-repeat, white;
+    background-size: 70px;
+}
