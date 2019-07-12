@@ -167,7 +167,7 @@ $(function() {
       case "Environnement Canada":
         return '<a href="' + props.url + '">' + getWeatherLinkText(props) + '</a>';
       case "Weather Underground":
-        return '<a href="https://www.wunderground.com/personal-weather-station/dashboard?ID=' + props.serial + '&cm_ven=localwx_pwsdash">' + getWeatherLinkText(props) + '</a>';
+        return '<a href="https://www.wunderground.com/dashboard/pws/' + props.serial + '">' + getWeatherLinkText(props) + '</a>';
       default:
         return 'Station météorologique ' + props.name;
     }
