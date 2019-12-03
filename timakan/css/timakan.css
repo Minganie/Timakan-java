@@ -84,3 +84,8 @@ table a:visited {
 .leaflet-popup-content-wrapper a {
     color: #101935;
 }
+.dropdown a {
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}

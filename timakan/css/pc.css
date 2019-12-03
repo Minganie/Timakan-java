@@ -33,6 +33,7 @@ header {
 header a {
   text-decoration: none;
   color: inherit;
+  display: block;
 }
 header div.overlay {
   position: absolute;
@@ -115,6 +116,53 @@ header .block.half.camera {
   background: url('../icons/camera.png') center 32px/47px 47px no-repeat,
               url('../icons/arrow.png') right 56px bottom 20px/29px 27px no-repeat;
   background-color: rgba(51, 24, 167, 0.4);
+}
+.dropdown > div.dropContent {
+	display: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 100%;
+	position: relative;
+	top: -22px;
+	overflow: auto;
+}
+.dropdown.full.station > div.dropContent > a {
+  background-color: rgba(10, 207, 151, 0.5);
+}
+.dropdown.half.station > div.dropContent > a {
+  background-color: rgba(45, 121, 171, 0.5);
+}
+.dropdown.camera > div.dropContent > a {
+  background-color: rgba(99, 64, 255, 0.5);
+}
+.dropdown > div.dropContent > a,
+.dropdown > div.dropContent button {
+	text-align: left;
+	margin: 0.1em;
+	padding: 0.2em;
+}
+.dropContent button {
+	display: block;
+	width: 100%;
+	background-color: rgba(45, 121, 171, 0.5);
+	border: none;
+	font-size: inherit;
+	color: inherit;
+	cursor: pointer;
+}
+.dropdown.full.station > div.dropContent > a:hover {
+  background-color: rgba(10, 207, 151, 0.9);
+}
+.dropdown.half.station > div.dropContent > a:hover,
+.dropdown.half.station > div.dropContent button:hover {
+  background-color: rgba(45, 121, 171, 0.9);
+}
+.dropdown.camera > div.dropContent > a:hover {
+  background-color: rgba(99, 64, 255, 0.9);
+}
+.dropdown:hover > div.dropContent {
+	display: block;
 }
 /* ------------------ MAP AND TABLE ------------------ */
 .leaflet-control-layers-expanded img {

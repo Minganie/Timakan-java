@@ -93,6 +93,42 @@ header .block.half.camera {
   background: url('../icons/camera.png') center top 29px/97px 97px no-repeat;
   background-color: rgba(51, 24, 167, 0.4);
 }
+.dropdown > div.dropContent {
+	display: none;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 100%;
+	position: relative;
+	top: -22px;
+}
+.dropdown.full.station > div.dropContent > a {
+  background-color: rgba(10, 207, 151, 0.7);
+}
+.dropdown.half.station > div.dropContent > a {
+  background-color: rgba(45, 121, 171, 0.7);
+}
+.dropdown.camera > div.dropContent > a {
+  background-color: rgba(99, 64, 255, 0.7);
+}
+.dropdown > div.dropContent > a,
+.dropdown > div.dropContent button {
+	display: block;
+	text-align: left;
+	margin: 0.1em;
+	padding: 0.2em;
+}
+.dropContent button {
+	width: 100%;
+	background-color: rgba(45, 121, 171, 0.7);
+	border: none;
+	font-size: inherit;
+	color: inherit;
+	cursor: pointer;
+}
+.dropdown.active > div.dropContent {
+	display: block;
+}
 /* ------------------ MAP AND TABLE ------------------ */
 .leaflet-control-layers-expanded img {
   margin: 0 3px;

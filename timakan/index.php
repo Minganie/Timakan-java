@@ -18,31 +18,11 @@
   <script src="https://code.highcharts.com/modules/data.js"></script>
   
   <!-- Hydrometeo -->
+  <script src="js/timakan.js"></script>
   <link rel='stylesheet' media='screen and (min-width: 600px)' href='css/pc.css' />
   <link rel='stylesheet' media='only screen and (max-width: 600px)' href='css/mobile.css' />
 </head>
 <body>
-<header>
-  <div class="overlay"></div>
-  <div class="block full title">
-    <h1>HYDROMÉTÉOROLOGIE<br>DE CHARLEVOIX</h1>
-    <h2>Surveillance et suivi du climat</h2>
-  </div>
-  <a href="water/284270" class="block full station">
-    <h2>STATION HYDROLOGIQUE</h2>
-    <h3>Rivière du Gouffre</h3>
-  </a>
-  <div class="block wrapper">
-    <a href="https://www.wunderground.com/weather/ca/baie-saint-paul/IQUBECBA2" class="block half station">
-      <h2>STATION MÉTÉOROLOGIQUE</h2>
-      <h3>Rivière du Gouffre</h3>
-    </a>
-    <a href="http://hydrometeocharlevoix.com/surv_img/66.171.62.24.jpeg" class="block half camera">
-      <h2>CAMÉRA DE SURVEILLANCE</h2>
-      <h3>Saint-Placide</h3>
-    </a>
-  </div>
-</header>
 <?php
 require_once('private.php');
 require_once('parsers.php');
@@ -58,6 +38,9 @@ $table .= '
 <th>Dernière observation</th>
 <th>Page de la station</th>
 </tr></thead><tbody>';
+$waterHtml = '';
+$weatherHtml = '';
+$cameraHtml = '';
 try {
     $dbh = new PDO('pgsql:host=localhost;dbname=timakan', $USER, $PW);
     if($dbh) {
@@ -101,12 +84,71 @@ order by ws.name";
         } else {
             error_log(print_r($dbh->errorInfo()), true);
         }
+		$waterSql = "SELECT name, serial FROM water_stations ORDER BY name";
+		$waterStmt = $dbh->prepare($waterSql);
+        if ($waterStmt->execute()) {
+            while ($row = $waterStmt->fetch(PDO::FETCH_ASSOC)) {
+				$waterHtml.="<a href='water/{$row['serial']}'>{$row['name']}</a>";
+			}
+		}
+		$cameraSql = "SELECT name, serial FROM camera_stations ORDER BY name";
+		$cameraStmt = $dbh->prepare($cameraSql);
+        if ($cameraStmt->execute()) {
+            while ($row = $cameraStmt->fetch(PDO::FETCH_ASSOC)) {
+				$cameraHtml.="<a href='surv_img/{$row['serial']}.jpeg'>{$row['name']}</a>";
+			}
+		}
+		$weatherSql = "SELECT name, serial, publisher, url FROM weather_stations ORDER BY name";
+		$weatherStmt = $dbh->prepare($weatherSql);
+        if ($weatherStmt->execute()) {
+            while ($row = $weatherStmt->fetch(PDO::FETCH_ASSOC)) {
+				switch($row['publisher']) {
+					case 'Info-Climat':
+						$t = <<<EOT
+<form action="http://www.cgfv.gouv.qc.ca/climat/donnees/OQMultiple.asp" method="post">
+	<input type="text" style="display:none;" id="cle" name="cle" value="{$row['serial']}"></input>
+    <input type="text" style="display:none;" id="type_graphique" name="type_graphique" value="Sommaire+climatologique"></input>
+    <input type="text" style="display:none;" id="une_cle" name="une_cle" value="{$row['serial']}"></input>
+    <button type="submit">{$row['name']}</button>
+</form>
+EOT;
+						$weatherHtml.=$t;
+						break;
+					case "Environnement Canada":
+						$weatherHtml .= "<a href='{$row['url']}'>{$row['name']}</a>";
+						break;
+					case "Weather Underground":
+						$weatherHtml .= "<a href='https://www.wunderground.com/dashboard/pws/{$row['serial']}'>{$row['name']}</a>";
+				}
+			}
+		}
     }
 } catch(Exception $e) {
     error_log($e->getMessage());
 }
 $table .= '</tbody></table>';
 ?>
+<header>
+  <div class="overlay"></div>
+  <div class="block full title">
+    <h1>HYDROMÉTÉOROLOGIE<br>DE CHARLEVOIX</h1>
+    <h2>Surveillance et suivi du climat</h2>
+  </div>
+  <div class="block full station dropdown">
+    <h2>STATIONS HYDROLOGIQUES</h2>
+	<div class="dropContent"><?= $waterHtml; ?></div>
+  </div>
+  <div class="block wrapper">
+    <div class="block half station dropdown">
+      <h2>STATIONS MÉTÉOROLOGIQUES</h2>
+	<div class="dropContent"><?= $weatherHtml; ?></div>
+    </div>
+    <div class="block half camera dropdown">
+      <h2>CAMÉRAS DE SURVEILLANCE</h2>
+	<div class="dropContent"><?= $cameraHtml; ?></div>
+    </div>
+  </div>
+</header>
 <div id="map_section">
   <h2>STATIONS HYDROLOGIQUES ET NIVEAU DE L'EAU</h2>
   <div>
