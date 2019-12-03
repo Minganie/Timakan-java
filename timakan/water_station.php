@@ -38,9 +38,9 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
   <body>
   <h1><?php echo $info['name']; ?></h1>
   <h2>#<?php echo $info['serial']; ?></h2>
-  <div id="graph_all" class="timakan_chart"></div>
-  <div id="graph_year" class="timakan_chart"></div>
   <div id="graph_week" class="timakan_chart"></div>
+  <div id="graph_year" class="timakan_chart"></div>
+  <div id="graph_all" class="timakan_chart"></div>
   <script>
   <?php 
     $mon = ((isset($info['monitoring']) && ! empty($info['monitoring'])) ? $info['monitoring'] : null);
