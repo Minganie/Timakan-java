@@ -96,7 +96,7 @@ public class Main {
 
             for (int i = 0, n = messages.length; i < n; i++) {
                 Message message = messages[i];
-                if(message.getSubject().contains("LS Report")) {
+                if(message != null && message.getSubject() != null && message.getSubject().contains("LS Report")) {
                     try {
                         Report report = new Report(message);
 //                        logger.info(report.toString());
