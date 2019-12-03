@@ -27,77 +27,36 @@
 require_once('private.php');
 require_once('parsers.php');
 
-$table = '<table>';
-$table .= '<thead><tr>
-<th>Station</th>';
-// $table .= '
-// <th>Tendance</th>
-// <th>Seuil</th>';
-$table .= '
-<th>Niveau actuel</th>
-<th>Dernière observation</th>
-<th>Page de la station</th>
-</tr></thead><tbody>';
 $waterHtml = '';
 $weatherHtml = '';
 $cameraHtml = '';
 try {
     $dbh = new PDO('pgsql:host=localhost;dbname=timakan', $USER, $PW);
     if($dbh) {
-        $sql = 
-"with lm as
-(select station, max(moment) as moment
-from corrected as co
-group by station),
-
-dernier as 
-(select co.station, co.moment, co.corrected
-from corrected as co
-	join lm on co.station = lm.station and co.moment = lm.moment),
-	
-trend as 
-(select co.station, 
-	regr_slope(corrected, extract(epoch from co.moment)) as slope
-from corrected as co
-where co.moment > now()-interval '18HOUR' and co.moment < now()
-group by co.station)
-
-select ws.serial, ws.name, to_char(d.moment AT TIME ZONE 'America/Montreal', 'YYYY-MM-DD HH24:MI') as moment, d.corrected, t.slope
-from water_stations as ws
-	left join dernier as d on ws.serial = d.station
-    left join trend as t on ws.serial = t.station
-order by ws.name";
-        $stmt = $dbh->prepare($sql);
-        if ($stmt->execute()) {
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $station = $row['name'];
-                $tendance = number_format($row['slope'], 2, ",", "");
-                $seuil = "A";
-                $niveau = number_format($row['corrected'], 2, ",", "");
-                $derniere = $row['moment'];
-                $serial = $row['serial'];
-                $page = '<a href="water/'.$serial.'">Détails</a>';
-                $table .= "<tr><td>$station</td>";
-                // $table .= "<td>$tendance</td><td>$seuil</td>";
-                $table .= "<td>$niveau m</td><td>$derniere</td><td>$page</td></tr>";
-            }
-        } else {
-            error_log(print_r($dbh->errorInfo()), true);
-        }
+		// Water stations
 		$waterSql = "SELECT name, serial FROM water_stations ORDER BY name";
 		$waterStmt = $dbh->prepare($waterSql);
         if ($waterStmt->execute()) {
             while ($row = $waterStmt->fetch(PDO::FETCH_ASSOC)) {
 				$waterHtml.="<a href='water/{$row['serial']}'>{$row['name']}</a>";
 			}
-		}
+        } else {
+            error_log(print_r($dbh->errorInfo()), true);
+        }
+		
+		// Cameras
 		$cameraSql = "SELECT name, serial FROM camera_stations ORDER BY name";
 		$cameraStmt = $dbh->prepare($cameraSql);
         if ($cameraStmt->execute()) {
             while ($row = $cameraStmt->fetch(PDO::FETCH_ASSOC)) {
 				$cameraHtml.="<a href='surv_img/{$row['serial']}.jpeg'>{$row['name']}</a>";
 			}
-		}
+		
+        } else {
+            error_log(print_r($dbh->errorInfo()), true);
+        }
+		
+		// Weather stations
 		$weatherSql = "SELECT name, serial, publisher, url FROM weather_stations ORDER BY name";
 		$weatherStmt = $dbh->prepare($weatherSql);
         if ($weatherStmt->execute()) {
@@ -121,12 +80,13 @@ EOT;
 						$weatherHtml .= "<a href='https://www.wunderground.com/dashboard/pws/{$row['serial']}'>{$row['name']}</a>";
 				}
 			}
-		}
+        } else {
+            error_log(print_r($dbh->errorInfo()), true);
+        }
     }
 } catch(Exception $e) {
     error_log($e->getMessage());
 }
-$table .= '</tbody></table>';
 ?>
 <header>
   <div class="overlay"></div>
@@ -153,7 +113,6 @@ $table .= '</tbody></table>';
   <h2>STATIONS HYDROLOGIQUES ET NIVEAU DE L'EAU</h2>
   <div>
     <div id="map"></div>
-    <div><?php echo $table; ?></div>
   </div>
   <footer><p>La municipalité de Baie-Saint-Paul n’est en aucun cas responsable de l’utilisation que font les usagers de ce service et des données qui y sont présentées. Les informations contenues sur la carte interactive sont fournies à titre indicatif. La municipalité de Baie-Saint-Paul ne peut garantir l'exactitude, la précision ou l'exhaustivité des données. Par conséquent, La municipalité de Baie-Saint-Paul décline toute responsabilité pour toute imprécision, inexactitude ou omission portant sur les informations présentées et pour tout problème ou erreur qui peut en découler.</p></footer>
 </div>

@@ -147,26 +147,6 @@ header .block.half.camera {
   height: 424px;
   margin-bottom: 1em;
 }
-#map_section table {
-  border: 0;
-  border-collapse: collapse;
-}
-#map_section table a {
-  color: #a29bee;
-}
-#map_section table td, #map_section th {
-  padding: 0.2em 0.75em 0.2em 0.75em;
-  text-align: center;
-}
-#map_section table td:first-child {
-  text-align: left;
-}
-#map_section table thead {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-#map_section table tbody tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.1);
-}
 #map_section footer {
   display: table;
   padding: 16px;

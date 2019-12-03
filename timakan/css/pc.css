@@ -180,34 +180,11 @@ header .block.half.camera {
   line-height: 120px;
   font-size: 18px;
 }
-#map_section > div {
-  display: flex;
-}
 #map {
   height: 100%;
   min-height: 452px;
-  flex: 2 0 60%;
-}
-#map_section > div > div:nth-child(2) {
-  padding: 0 2em 0 2em;
-  flex: 1 0 39%;
-}
-#map_section table {
-  border: 0;
-  border-collapse: collapse;
-}
-#map_section table a {
-  color: #a29bee;
-}
-#map_section table td, #map_section th {
-  padding: 0.2em 0.75em 0.2em 0.75em;
-  text-align: center;
-}
-#map_section table thead {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-#map_section table tbody tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.1);
+  width: 98%;
+  margin: 0 1%;
 }
 #map_section footer {
   display: table;
