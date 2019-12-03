@@ -248,8 +248,8 @@ $(function() {
       });
     },
     onEachFeature: function onEachFeature(feature, layer) {
-      if (feature && feature.properties && feature.properties.ip) {
-        layer.bindPopup('<img src="/surv_img/' + feature.properties.ip + '.jpeg" alt="" width=800 height=450 />');
+      if (feature && feature.properties && feature.properties.serial) {
+        layer.bindPopup('<img src="surv_img/' + feature.properties.serial + '.jpeg" alt="" width=800 height=450 />');
       }
     }
   });
