@@ -34,11 +34,11 @@ try {
     $dbh = new PDO('pgsql:host=localhost;dbname=timakan', $USER, $PW);
     if($dbh) {
 		// Water stations
-		$waterSql = "SELECT name, serial FROM water_stations ORDER BY name";
+		$waterSql = "SELECT name, gid FROM water_stations ORDER BY name";
 		$waterStmt = $dbh->prepare($waterSql);
         if ($waterStmt->execute()) {
             while ($row = $waterStmt->fetch(PDO::FETCH_ASSOC)) {
-				$waterHtml.="<a href='water/{$row['serial']}'>{$row['name']}</a>";
+				$waterHtml.="<a href='water/{$row['gid']}'>{$row['name']}</a>";
 			}
         } else {
             error_log(print_r($dbh->errorInfo()), true);
@@ -152,7 +152,7 @@ $(function() {
     }
   });
   var map = L.map('map').setView([47.55, -70.50], 10);
-  L.tileLayer.provider('Wikimedia').addTo(map);
+  L.tileLayer.provider('Esri.WorldTopoMap').addTo(map);
   vingt.addTo(map);
   cent.addTo(map);
 
@@ -217,8 +217,8 @@ $(function() {
       });
     },
     onEachFeature: function onEachFeature(feature, layer) {
-      if (feature && feature.properties && feature.properties.name && feature.properties.serial) {
-        var s = '<a href="water/' + feature.properties.serial + '">Station de mesure du niveau d\'eau ' + feature.properties.name + '</a>';
+      if (feature && feature.properties && feature.properties.name && feature.properties.gid) {
+        var s = '<a href="water/' + feature.properties.gid + '">Station de mesure du niveau d\'eau ' + feature.properties.name + '</a>';
         layer.bindPopup(s);
       }
     }

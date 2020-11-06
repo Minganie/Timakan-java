@@ -5,7 +5,7 @@ try {
     $dbh = new PDO('pgsql:host=localhost;dbname=timakan', $USER, $PW);
     if($dbh) {
         $sql = "
-        SELECT ws.serial, 
+        SELECT ws.gid, 
             ws.name, 
             st_astext(ws.geom) as wkt, 
             st_y(ws.geom) as lat, 

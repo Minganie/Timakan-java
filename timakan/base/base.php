@@ -8,7 +8,7 @@ if(isset($_GET['stations']) && !empty($_GET['stations'])) {
         switch ($type) {
             case "water":
                 $table = "water_stations";
-                $props = "'serial', serial, 'name', name";
+                $props = "'gid', gid, 'name', name";
                 break;
             case "weather":
                 $table = "weather_stations";

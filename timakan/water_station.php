@@ -17,7 +17,7 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
     try {
         $dbh = new PDO('pgsql:host=localhost;dbname=timakan', $USER, $PW);
         if($dbh) {
-            $info_sql = "SELECT * FROM water_stations WHERE serial=$serial";
+            $info_sql = "SELECT * FROM water_stations WHERE gid=$serial";
             $stmt = $dbh->prepare($info_sql);
             $i = 0;
             if ($stmt->execute()) {
@@ -37,7 +37,6 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
 ?>
   <body>
   <h1><?php echo $info['name']; ?></h1>
-  <h2>#<?php echo $info['serial']; ?></h2>
   <div id="graph_week" class="timakan_chart"></div>
   <div id="graph_year" class="timakan_chart"></div>
   <div id="graph_all" class="timakan_chart"></div>
@@ -100,7 +99,7 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
     });
   Highcharts.chart('graph_all', {
     data: {
-        csvURL: window.location.origin + '/csv/<?php echo $info['serial'] ?>_all.csv',
+        csvURL: window.location.origin + '/csv/<?php echo $info['gid'] ?>_all.csv',
         parseDate: parseDateTime
     },
     title: {
@@ -128,7 +127,7 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
   });
   Highcharts.chart('graph_year', {
     data: {
-        csvURL: window.location.origin + '/csv/<?php echo $info['serial'] ?>_year.csv',
+        csvURL: window.location.origin + '/csv/<?php echo $info['gid'] ?>_year.csv',
         parseDate: parseDateTime,
         firstRowAsNames: false,
         startRow:1
@@ -188,7 +187,7 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
   });
   Highcharts.chart('graph_week', {
     data: {
-        csvURL: window.location.origin + '/csv/<?php echo $info['serial'] ?>_week.csv',
+        csvURL: window.location.origin + '/csv/<?php echo $info['gid'] ?>_week.csv',
         parseDate: parseDateTime,
         firstRowAsNames: false,
         startRow:1
