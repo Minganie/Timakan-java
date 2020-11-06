@@ -3,7 +3,6 @@ com\hydrometeocharlevoix\timakan\Private.class
 com\hydrometeocharlevoix\timakan\BadTimezoneException.class
 com\hydrometeocharlevoix\timakan\Repeater.class
 com\hydrometeocharlevoix\timakan\Main.class
-com\hydrometeocharlevoix\timakan\Main$1.class
 com\hydrometeocharlevoix\timakan\Report.class
 com\hydrometeocharlevoix\timakan\Reparser.class
 com\hydrometeocharlevoix\timakan\Observation.class

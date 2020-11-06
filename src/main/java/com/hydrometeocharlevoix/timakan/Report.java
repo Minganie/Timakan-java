@@ -537,6 +537,8 @@ public class Report {
      */
     private static String getTextFromMessage(Message message) throws IOException, MessagingException, ParseException {
         String result = "";
+        if(message.isMimeType("text/plain"))
+            return message.getContent().toString();
         // message.getContent().toString(); // would work if isMimeType("text/plain") returned true...
         if(message.getContentType().equals("text/plain; charset=\"us-ascii\".")) {
             try {
@@ -688,7 +690,8 @@ public class Report {
                 "ll_mem, ll_log_type, ll_state, ll_start_logger, pl_type, pl_model, pl_v, pl_battery, pl_n_logs, pl_max_logs, pl_rate, " +
                 "pl_mem, pl_log_type, pl_state, pl_start_logger) " +
                 // 1-10
-                "VALUES (?, to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?, ?, ?, ?, ?, ?, ?," +
+                "VALUES ((SELECT station FROM water_stations_levelsender WHERE levelsender=?), to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS'), " +
+                "?, ?, ?, ?, ?, ?, ?, ?," +
                 // 11-20
                 "to_timestamp(?, 'DD-MM-YYYY HH24:MI:SS'), ?, ?, ?, ?, ?, ?, ?, ?, ?," +
                 // 21-30
@@ -758,7 +761,8 @@ public class Report {
             m_stmt.setString(33, pl_start_logger);
             // ----------------- end new info
             m_stmt.execute();
-            String sql = "SELECT id FROM emails WHERE station=" + station + " AND lower(to_char(sent, 'YYYY-MM-DD HH24:MI:SS'))=lower('" + sentDate + "')";
+            String sql = "SELECT id FROM emails WHERE station=(SELECT station FROM water_stations_levelsender WHERE levelsender=" +
+                    station + ") AND lower(to_char(sent, 'YYYY-MM-DD HH24:MI:SS'))=lower('" + sentDate + "')";
             ResultSet rs = conn.createStatement().executeQuery(sql);
             Integer id = null;
             if(rs.next()) {
@@ -766,11 +770,11 @@ public class Report {
 
                 // Observations within the email
                 PreparedStatement lvl_stmt = conn.prepareStatement("INSERT INTO corrected (station, moment, level, l_temp, email) " +
-                        "VALUES (?, to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ?, ?, ?)" +
+                        "VALUES ((SELECT station FROM water_stations_levelsender WHERE levelsender=?), to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ?, ?, ?)" +
                         "ON CONFLICT (station, moment) DO " +
                         "UPDATE SET level = EXCLUDED.level, l_temp = EXCLUDED.l_temp");
                 PreparedStatement p_stmt = conn.prepareStatement("INSERT INTO corrected (station, moment, pressure, p_temp, email) " +
-                        "VALUES (?, to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ?, ?, ?)" +
+                        "VALUES ((SELECT station FROM water_stations_levelsender WHERE levelsender=?), to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ?, ?, ?)" +
                         "ON CONFLICT (station, moment) DO " +
                         "UPDATE SET pressure = EXCLUDED.pressure, p_temp = EXCLUDED.p_temp");
                 lvl_stmt.setInt(1, station);

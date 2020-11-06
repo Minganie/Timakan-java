@@ -1,6 +1,7 @@
 src/main/java/com/hydrometeocharlevoix/timakan/Private.java
 target/classes/com/hydrometeocharlevoix/timakan/Private.class
 timakan/private.php
+*.backup
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839

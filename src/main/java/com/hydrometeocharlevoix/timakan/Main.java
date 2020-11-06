@@ -18,6 +18,7 @@ import java.util.Properties;
  * own class.
  */
 public class Main {
+    private static final String host = "hydrometeocharlevoix.com";
     // Set logging
     private static Logger logger = LogManager.getLogger(Main.class);
 
@@ -30,18 +31,10 @@ public class Main {
     public static void sendWarningEmail(String subject, String body) {
         try {
             Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.mail.yahoo.com");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.port", "465");
-            Session session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(Private.getTimakanEmail(),Private.getTimakanPw());
-                        }
-                    });
+            props.setProperty("mail.smtp.starttls.enable", "true");
+            props.setProperty("mail.smtp.host", host);
+            props.setProperty("mail.smtp.port", "587");
+            Session session = Session.getInstance(props);
 
             Message message = new MimeMessage(session);
             message.addHeader("Content-type", "text/plain; charset=UTF-8");
@@ -75,17 +68,9 @@ public class Main {
         try {
 
             //create properties field
-            Properties properties = new Properties();
-
-            properties.put("mail.pop3.host", "pop.mail.yahoo.com");
-            properties.put("mail.pop3.port", "995");
-            properties.put("mail.pop3.starttls.enable", "true");
-            Session emailSession = Session.getDefaultInstance(properties);
-
-            //create the POP3 store object and connect with the pop server
-            Store store = emailSession.getStore("pop3s");
-
-            store.connect("pop.mail.yahoo.com", Private.getHomeStationEmail(), Private.getHomeStationPw());
+            Session session = javax.mail.Session.getInstance(new Properties());
+            Store store = session.getStore("imaps");
+            store.connect(host, Private.getHomeStationEmail(), Private.getHomeStationPw());
 
             //create the folder object and open it
             Folder emailFolder = store.getFolder("INBOX");
@@ -93,13 +78,16 @@ public class Main {
 
             // retrieve the messages from the folder in an array and print it
             Message[] messages = emailFolder.getMessages();
+            logger.info("Inbox contains " + messages.length + " messages");
 
             for (int i = 0, n = messages.length; i < n; i++) {
+                logger.info("Treating message #" + i);
                 Message message = messages[i];
                 if(message != null && message.getSubject() != null && message.getSubject().contains("LS Report")) {
+                    logger.info("Not null message with subject: "+message.getSubject());
                     try {
                         Report report = new Report(message);
-//                        logger.info(report.toString());
+                        logger.info(report.toString());
                         report.insertIntoDb(conn);
                         message.setFlag(Flags.Flag.DELETED, true);
                     } catch (BadSensorConfiguration bsce) {
@@ -158,15 +146,15 @@ public class Main {
      * @throws SQLException
      */
     public static void updateCsvs(Connection conn) throws SQLException {
-        String stn_sql = "SELECT serial FROM water_stations";
+        String stn_sql = "SELECT gid FROM water_stations";
         ResultSet stations = conn.createStatement().executeQuery(stn_sql);
         PreparedStatement csv_stmt = conn.prepareStatement("SELECT timakan_export_historic(?), timakan_export_year(?), timakan_export_week(?)");
         while(stations.next()) {
-            csv_stmt.setInt(1, stations.getInt("serial"));
-            csv_stmt.setInt(2, stations.getInt("serial"));
-            csv_stmt.setInt(3, stations.getInt("serial"));
+            csv_stmt.setInt(1, stations.getInt("gid"));
+            csv_stmt.setInt(2, stations.getInt("gid"));
+            csv_stmt.setInt(3, stations.getInt("gid"));
             csv_stmt.execute();
-//            logger.info("Successfully executed Timakan and updated the csv's for station " + stations.getInt("serial"));
+//            logger.info("Successfully executed Timakan and updated the csv's for station " + stations.getInt("gid"));
         }
     }
 
@@ -183,22 +171,22 @@ public class Main {
         long mins = secs*60L;
         StringBuilder b = new StringBuilder();
         if(nanos/mins > 0) {
-            b.append(nanos/mins + "m ");
+            b.append(nanos / mins).append("m ");
             nanos = nanos%mins;
         }
         if(nanos/secs > 0) {
-            b.append(nanos/secs + "s ");
+            b.append(nanos / secs).append("s ");
             nanos = nanos%secs;
         }
         if(nanos/millis > 0) {
-            b.append(nanos/millis + "ms ");
+            b.append(nanos / millis).append("ms ");
             nanos = nanos%millis;
         }
         if(nanos/micros > 0) {
-            b.append(nanos/micros + "us ");
+            b.append(nanos / micros).append("us ");
             nanos = nanos%micros;
         }
-        b.append(nanos + "ns");
+        b.append(nanos).append("ns");
         return b.toString();
     }
 
@@ -207,7 +195,6 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-
         // Setup
         try {
             long startTime = System.nanoTime();
