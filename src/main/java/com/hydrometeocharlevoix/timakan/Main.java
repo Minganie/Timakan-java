@@ -18,7 +18,7 @@ import java.util.Properties;
  * own class.
  */
 public class Main {
-    private static final String host = "hydrometeocharlevoix.com";
+    private static final String host = "yahoo.com";
     // Set logging
     private static Logger logger = LogManager.getLogger(Main.class);
 
@@ -31,9 +31,9 @@ public class Main {
     public static void sendWarningEmail(String subject, String body) {
         try {
             Properties props = new Properties();
-            props.setProperty("mail.smtp.starttls.enable", "true");
-            props.setProperty("mail.smtp.host", host);
-            props.setProperty("mail.smtp.port", "587");
+            props.setProperty("mail.smtp.ssl.enable", "true");
+            props.setProperty("mail.smtp.host", "smtp.mail." + host);
+            props.setProperty("mail.smtp.port", "465");
             Session session = Session.getInstance(props);
 
             Message message = new MimeMessage(session);
@@ -47,7 +47,7 @@ public class Main {
             message.setSubject(subject);
             message.setText(body);
 
-            Transport.send(message);
+            Transport.send(message, Private.getTimakanEmail(), Private.getTimakanPw());
         }
         catch (Exception e) {
             logger.error("Unexpected error while sending a warning email: " + (e.getMessage() == null ? "NullPointerException?" : e.getMessage()));
@@ -64,25 +64,25 @@ public class Main {
      * @throws BadTimezoneException
      */
     public static void checkEmail(Connection conn) throws SQLException, BadTimezoneException {
+        logger.info("Checking email for "+Private.getHomeStationEmail());
         checkDbTz(conn);
         try {
 
             //create properties field
             Session session = javax.mail.Session.getInstance(new Properties());
-            Store store = session.getStore("imaps");
-            store.connect(host, Private.getHomeStationEmail(), Private.getHomeStationPw());
+            Store store = session.getStore("pop3s");
+            store.connect("pop.mail." + host, Private.getHomeStationEmail(), Private.getHomeStationPw());
 
             //create the folder object and open it
             Folder emailFolder = store.getFolder("INBOX");
+
             emailFolder.open(Folder.READ_WRITE);
 
             // retrieve the messages from the folder in an array and print it
             Message[] messages = emailFolder.getMessages();
             logger.info("Inbox contains " + messages.length + " messages");
 
-            for (int i = 0, n = messages.length; i < n; i++) {
-                logger.info("Treating message #" + i);
-                Message message = messages[i];
+            for(Message message : messages) {
                 if(message != null && message.getSubject() != null && message.getSubject().contains("LS Report")) {
                     logger.info("Not null message with subject: "+message.getSubject());
                     try {
@@ -107,9 +107,8 @@ public class Main {
                     }
                 }
             }
-
             //close the store and folder objects
-            emailFolder.close(true);
+            emailFolder.close();
             store.close();
 
         } catch (Exception e) {

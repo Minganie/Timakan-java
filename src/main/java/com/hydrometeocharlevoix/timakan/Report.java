@@ -537,8 +537,8 @@ public class Report {
      */
     private static String getTextFromMessage(Message message) throws IOException, MessagingException, ParseException {
         String result = "";
-        if(message.isMimeType("text/plain"))
-            return message.getContent().toString();
+//        if(message.isMimeType("text/plain"))
+//            return message.getContent().toString(); // text/plain; charset... isMimeType(text/plain). sigh.
         // message.getContent().toString(); // would work if isMimeType("text/plain") returned true...
         if(message.getContentType().equals("text/plain; charset=\"us-ascii\".")) {
             try {
