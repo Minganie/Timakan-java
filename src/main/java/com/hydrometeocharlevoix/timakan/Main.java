@@ -18,7 +18,7 @@ import java.util.Properties;
  * own class.
  */
 public class Main {
-    private static final String host = "yahoo.com";
+    private static final String host = "hydrometeocharlevoix.com";
     // Set logging
     private static Logger logger = LogManager.getLogger(Main.class);
 
@@ -32,7 +32,7 @@ public class Main {
         try {
             Properties props = new Properties();
             props.setProperty("mail.smtp.ssl.enable", "true");
-            props.setProperty("mail.smtp.host", "smtp.mail." + host);
+            props.setProperty("mail.smtp.host", host);
             props.setProperty("mail.smtp.port", "465");
             Session session = Session.getInstance(props);
 
@@ -71,7 +71,7 @@ public class Main {
             //create properties field
             Session session = javax.mail.Session.getInstance(new Properties());
             Store store = session.getStore("pop3s");
-            store.connect("pop.mail." + host, Private.getHomeStationEmail(), Private.getHomeStationPw());
+            store.connect(host, Private.getHomeStationEmail(), Private.getHomeStationPw());
 
             //create the folder object and open it
             Folder emailFolder = store.getFolder("INBOX");
