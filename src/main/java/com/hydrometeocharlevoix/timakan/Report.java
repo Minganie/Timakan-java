@@ -12,10 +12,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -514,9 +511,11 @@ public class Report {
      * @throws ParseException
      */
     public static String parseSentDate(String mumbo) throws ParseException {
-        //home_test@yahoo.com; Sat, 16 Mar 2019 23:32:41 +0000
-        //^.+      @.+       ;(                         )+\\d+
-        Pattern pattern = Pattern.compile("^.+@.+;\\s(.+)\\s\\+\\d+$");
+        //from hydrometeocharlevoix.com
+        //	by hydrometeocharlevoix.com with LMTP id mPAFCLUuxWAFPwAAF4vP9g
+        //	for <timakan@hydrometeocharlevoix.com>; Sat, 12 Jun 2021 22:01:25 +0000
+        //^.+@.+                                 >;\\s(                     ) +\\d+$
+        Pattern pattern = Pattern.compile("^.+@.+>;\\s(.+\\s\\+\\d+)$");
         Matcher matcher = pattern.matcher(mumbo);
         if(matcher.find() && matcher.groupCount() == 1)
             return matcher.group(1);
@@ -661,8 +660,17 @@ public class Report {
         body = getTextFromMessage(email);
         Date ladate;
         if(email.getSentDate() == null) {   // yaaaay, pop3 doesn't give you date. needle-haystack it from headers
-            DateFormat edf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
-            String dateString = parseSentDate(email.getHeader("X-Apparently-To")[0]);
+            //Sat, 12 Jun 2021 22:01:25 +0000
+            DateFormat edf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
+            String dateLine;
+            try {
+                String[] received = email.getHeader("Received");
+                String[] lines = received[0].split("\n");
+                dateLine = lines[lines.length-1];
+            } catch (Exception e) {
+                throw new ParseException("Can't seem to find date from email headers: "+(email.getHeader("Received") == null ? "No Received header" : email.getHeader("Received")), 0);
+            }
+            String dateString = parseSentDate(dateLine);
             ladate = edf.parse(dateString);
         } else {
             ladate = email.getSentDate();

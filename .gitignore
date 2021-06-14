@@ -1,3 +1,4 @@
+*.dat
 src/main/java/com/hydrometeocharlevoix/timakan/Private.java
 target/classes/com/hydrometeocharlevoix/timakan/Private.class
 timakan/private.php
