@@ -4,6 +4,10 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -209,7 +213,7 @@ public class Report {
     }
 
     /**
-     * Determines the sample rate from the line of text that goes "Sample Rate: 30 minutes". Checks for the time unites.
+     * Determines the sample rate from the line of text that goes "Sample Rate: 30 minutes". Checks for the time units.
      * @param mumbo
      * @return
      */
@@ -810,76 +814,91 @@ public class Report {
         }
     }
 
-    /*public void updateIntoDb(Connection conn) throws SQLException {
-        // Email backup
-        try (PreparedStatement m_stmt = conn.prepareStatement("UPDATE emails SET sample_rate=?, report_rate=?, " +
-                "state=?, start_report=to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ll_type=?, ll_model=?, ll_v=?, " +
-                "ll_battery=?, ll_n_logs=?, ll_max_logs=?, ll_rate=?, ll_mem=?, ll_log_type=?, ll_state=?, " +
-                "ll_start_logger=to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), pl_type=?, pl_model=?, pl_v=?, pl_battery=?, " +
-                "pl_n_logs=?, pl_max_logs=?, pl_rate=?, pl_mem=?, pl_log_type=?, pl_state=?, " +
-                "pl_start_logger=to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS') WHERE id=?")) {
-// sample_rate
-            m_stmt.setInt(1, sample_rate);
-// report_rate
-            m_stmt.setInt(2, report_rate);
-// state
-            m_stmt.setString(3, state);
-// start_report
-//            System.out.println("Start report: '" + start_report + "'");
-//            System.out.println("ll_start: '" + ll_start_logger + "'");
-//            System.out.println("pl_start: '" + pl_start_logger + "'");
-            m_stmt.setString(4, start_report);
-// ll_type
-            m_stmt.setString(5, ll_type);
-// ll_model
-            m_stmt.setString(6, ll_model);
-// ll_v
-            m_stmt.setString(7, ll_v);
-// ll_battery
-            m_stmt.setInt(8, ll_battery);
-// ll_n_logs
-            m_stmt.setInt(9, ll_n_logs);
-// ll_max_logs
-            m_stmt.setInt(10, ll_max_logs);
-// ll_rate
-            m_stmt.setInt(11, ll_rate);
-// ll_mem
-            m_stmt.setString(12, ll_mem);
-// ll_log_type
-            m_stmt.setString(13, ll_log_type);
-// ll_state
-            m_stmt.setString(14, ll_state);
-// ll_start_logger
-            m_stmt.setString(15, ll_start_logger);
-// pl_type
-            m_stmt.setString(16, pl_type);
-// pl_model
-            m_stmt.setString(17, pl_model);
-// pl_v
-            m_stmt.setString(18, pl_v);
-// pl_battery
-            m_stmt.setInt(19, pl_battery);
-// pl_n_logs
-            m_stmt.setInt(20, pl_n_logs);
-// pl_max_logs
-            m_stmt.setInt(21, pl_max_logs);
-// pl_rate
-            m_stmt.setInt(22, pl_rate);
-// pl_mem
-            m_stmt.setString(23, pl_mem);
-// pl_log_type
-            m_stmt.setString(24, pl_log_type);
-// pl_state
-            m_stmt.setString(25, pl_state);
-// pl_start_logger
-            m_stmt.setString(26, pl_start_logger);
-// id
-//            m_stmt.setInt(27, id);
-            m_stmt.execute();
-        } catch (Exception e) {
-            throw e;
+    // SEND BY FTP
+
+    private byte[] formatAsJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("  \"head\": {");
+        sb.append("    \"transaction\": 0,");
+        sb.append("    \"signature\": 19382,");
+        sb.append("    \"environment\": {");
+        sb.append("      \"station_name\": \"23092\",");
+        sb.append("      \"table_name\": \"Data_5_Min_2\",");
+        sb.append("      \"model\": \"CR300\",");
+        sb.append("      \"serial_no\": \"23092\",");
+        sb.append("      \"os_version\": \"CR300.Std.10.02\",");
+        sb.append("      \"prog_name\": \"CPU:486_St-Andre-Avellin_5 minutes.cr300\"");
+        sb.append("    },");
+        sb.append("    \"fields\": [");
+        sb.append("      {");
+        sb.append("        \"name\": \"Batt_volt_Min\",");
+        sb.append("        \"type\": \"xsd:float\",");
+        sb.append("        \"process\": \"Min\",");
+        sb.append("        \"settable\": false");
+        sb.append("      },");
+        sb.append("      {");
+        sb.append("        \"name\": \"PTemp\",");
+        sb.append("        \"type\": \"xsd:float\",");
+        sb.append("        \"process\": \"Smp\",");
+        sb.append("        \"settable\": false");
+        sb.append("      },");
+        sb.append("      {");
+        sb.append("        \"name\": \"RLS_Water_Level\",");
+        sb.append("        \"type\": \"xsd:float\",");
+        sb.append("        \"units\": \"M\",");
+        sb.append("        \"process\": \"Smp\",");
+        sb.append("        \"settable\": false");
+        sb.append("      },");
+        sb.append("      {");
+        sb.append("        \"name\": \"Water_Temp\",");
+        sb.append("        \"type\": \"xsd:float\",");
+        sb.append("        \"units\": \"Degrees C\",");
+        sb.append("        \"process\": \"Smp\",");
+        sb.append("        \"settable\": false");
+        sb.append("      }");
+        sb.append("    ]");
+        sb.append("  },");
+        sb.append("  \"data\": [");
+        sb.append("    {");
+        sb.append("      \"time\": \"2021-06-04T11:20:00\",");
+        sb.append("      \"vals\": [");
+        sb.append("        13.49,");
+        sb.append("        32.44,");
+        sb.append("        151.825,");
+        sb.append("        17.6");
+        sb.append("      ]");
+        sb.append("    }");
+        sb.append("  ]");
+        sb.append("}");
+        return sb.toString().getBytes();
+    }
+
+    /**
+     * Sends the data in json format by ftp to Hydrometeo's server.
+     * @return
+     */
+    public void sendByFtp(Connection conn) throws IOException, SQLException {
+        // get the Hydrometeo ID
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT hm_id FROM water_stations WHERE gid=(SELECT station FROM water_stations_levelsender WHERE levelsender=?)")) {
+            stmt.setInt(1, station);
+            ResultSet rs = stmt.executeQuery();
+            int hm_id = rs.getInt("hm_id");
+            byte[] bytes = formatAsJson();
+            Date today = new Date();
+            DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
+            String ftpUrl = String.format("ftp://%s:%s@soshydro.net:21/testftp/%d.%s.dat",
+                    Private.getFtpUser(), Private.getFtpPassword(),
+                    hm_id, df.format(today));
+            URLConnection urlConnection = new URL(ftpUrl).openConnection();
+            OutputStream outputStream = urlConnection.getOutputStream();
+            // write to outputstream
+            outputStream.write(bytes);
+            // flush
+            outputStream.flush();
+            outputStream.close();
         }
-    }*/
+    }
 
     // UTILITIES
     @Override
