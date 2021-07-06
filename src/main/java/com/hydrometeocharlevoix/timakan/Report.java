@@ -66,6 +66,9 @@ public class Report {
     private List<Observation> pressures = new ArrayList<>();
     private List<List<Observation>> obs = new ArrayList<>();
 
+    // Corrected, to send by ftp
+    private Map<String, DataBag> corrected = new HashMap<>();
+
 
     // GETTERS
     public int getStation() {
@@ -96,6 +99,10 @@ public class Report {
 
     public List<Observation> getPressures() {
         return pressures;
+    }
+
+    public Map<String, DataBag> getCorrected() {
+        return corrected;
     }
 
     // PARSERS
@@ -559,38 +566,6 @@ public class Report {
         return result;
     }
 
-//    private static String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws IOException, MessagingException {
-//
-//        int count = mimeMultipart.getCount();
-//        if (count == 0)
-//            throw new MessagingException("Multipart with no body parts not supported.");
-//        boolean multipartAlt = new ContentType(mimeMultipart.getContentType()).match("multipart/alternative");
-//        if (multipartAlt)
-//            // alternatives appear in an order of increasing
-//            // faithfulness to the original content. Customize as req'd.
-//            // try zero for plain text?
-//            return getTextFromBodyPart(mimeMultipart.getBodyPart(0));
-//        String result = "";
-//        for (int i = 0; i < count; i++) {
-//            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
-//            result += "\n" + getTextFromBodyPart(bodyPart);
-//        }
-//        return result;
-//    }
-//
-//    private static String getTextFromBodyPart(BodyPart bodyPart) throws IOException, MessagingException {
-//        String result = "";
-//        if (bodyPart.isMimeType("text/plain")) {
-//            result += "\r\n" + bodyPart.getContent();
-//        } else if (bodyPart.isMimeType("text/html")) {
-//            String html = (String) bodyPart.getContent();
-//            result += "\n" + org.jsoup.Jsoup.parse(html).text();
-//        } else if (bodyPart.getContent() instanceof MimeMultipart){
-//            result += "\n" + getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
-//        }
-//        return result;
-//    }
-
     // CONSTRUCTORS
 
     /**
@@ -637,20 +612,7 @@ public class Report {
         this.sentDate = date;
         parseReport(body);
     }
-/*
-    /**
-     * Constructor for use with @see Reparser. Only used to copy data from database rather than email.
-     * @param id
-     * @param body
-     * @param date
-     */
-    /*public Report(int id, String body, String date) throws ParseException, BadSensorConfiguration, BadTimeUnit {
-        this.id = id;
-        this.body = body;
-        this.sentDate = date;
-        parseReport(body);
-    }
-*/
+
     /**
      * Standard constructor. Extracts all necessary information from a @see javax.mail.Message
      * @param email
@@ -719,57 +681,31 @@ public class Report {
             m_stmt.setInt(6, baroLogger);
             m_stmt.setString(7, body);
             // ----------------- new info
-// sample_rate
             m_stmt.setInt(8, sample_rate);
-// report_rate
             m_stmt.setInt(9, report_rate);
-// state
             m_stmt.setString(10, state);
-// start_report
             m_stmt.setString(11, start_report);
-// ll_type
             m_stmt.setString(12, ll_type);
-// ll_model
             m_stmt.setString(13, ll_model);
-// ll_v
             m_stmt.setString(14, ll_v);
-// ll_battery
             m_stmt.setInt(15, ll_battery);
-// ll_n_logs
             m_stmt.setInt(16, ll_n_logs);
-// ll_max_logs
             m_stmt.setInt(17, ll_max_logs);
-// ll_rate
             m_stmt.setInt(18, ll_rate);
-// ll_mem
             m_stmt.setString(19, ll_mem);
-// ll_log_type
             m_stmt.setString(20, ll_log_type);
-// ll_state
             m_stmt.setString(21, ll_state);
-// ll_start_logger
             m_stmt.setString(22, ll_start_logger);
-// pl_type
             m_stmt.setString(23, pl_type);
-// pl_model
             m_stmt.setString(24, pl_model);
-// pl_v
             m_stmt.setString(25, pl_v);
-// pl_battery
             m_stmt.setInt(26, pl_battery);
-// pl_n_logs
             m_stmt.setInt(27, pl_n_logs);
-// pl_max_logs
             m_stmt.setInt(28, pl_max_logs);
-// pl_rate
             m_stmt.setInt(29, pl_rate);
-// pl_mem
             m_stmt.setString(30, pl_mem);
-// pl_log_type
             m_stmt.setString(31, pl_log_type);
-// pl_state
             m_stmt.setString(32, pl_state);
-// pl_start_logger
             m_stmt.setString(33, pl_start_logger);
             // ----------------- end new info
             m_stmt.execute();
@@ -784,11 +720,13 @@ public class Report {
                 PreparedStatement lvl_stmt = conn.prepareStatement("INSERT INTO corrected (station, moment, level, l_temp, email) " +
                         "VALUES ((SELECT station FROM water_stations_levelsender WHERE levelsender=?), to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ?, ?, ?)" +
                         "ON CONFLICT (station, moment) DO " +
-                        "UPDATE SET level = EXCLUDED.level, l_temp = EXCLUDED.l_temp");
+                        "UPDATE SET level = EXCLUDED.level, l_temp = EXCLUDED.l_temp " +
+                        "RETURNING to_char(moment, 'YYYY-MM-DD\"T\"HH24:MI:SS') as moment, l_temp, p_temp, corrected");
                 PreparedStatement p_stmt = conn.prepareStatement("INSERT INTO corrected (station, moment, pressure, p_temp, email) " +
                         "VALUES ((SELECT station FROM water_stations_levelsender WHERE levelsender=?), to_timestamp(?, 'DD/MM/YYYY HH24:MI:SS'), ?, ?, ?)" +
                         "ON CONFLICT (station, moment) DO " +
-                        "UPDATE SET pressure = EXCLUDED.pressure, p_temp = EXCLUDED.p_temp");
+                        "UPDATE SET pressure = EXCLUDED.pressure, p_temp = EXCLUDED.p_temp " +
+                        "RETURNING to_char(moment, 'YYYY-MM-DD\"T\"HH24:MI:SS') as moment, l_temp, p_temp, corrected");
                 lvl_stmt.setInt(1, station);
                 lvl_stmt.setInt(5, id);
                 p_stmt.setInt(1, station);
@@ -798,12 +736,30 @@ public class Report {
                     lvl_stmt.setFloat(3, obs.getLevelOrBaro());
                     lvl_stmt.setFloat(4, obs.getTemp());
                     lvl_stmt.execute();
+                    ResultSet lvl_rs = lvl_stmt.getResultSet();
+                    lvl_rs.next();
+                    Double corr = lvl_rs.getDouble("corrected");
+                    Double pTemp = lvl_rs.getDouble("p_temp");
+                    Double wTemp = lvl_rs.getDouble("l_temp");
+                    if(Math.abs(corr-0.0) > 0.00001) {
+                        DataBag db = new DataBag(battery, pTemp, corr, wTemp);
+                        this.corrected.put(lvl_rs.getString("moment"), db);
+                    }
                 }
                 for (Observation obs : pressures) {
                     p_stmt.setString(2, obs.getDateTime());
                     p_stmt.setFloat(3, obs.getLevelOrBaro());
                     p_stmt.setFloat(4, obs.getTemp());
                     p_stmt.execute();
+                    ResultSet p_rs = p_stmt.getResultSet();
+                    p_rs.next();
+                    Double corr = p_rs.getDouble("corrected");
+                    Double pTemp = p_rs.getDouble("p_temp");
+                    Double wTemp = p_rs.getDouble("l_temp");
+                    if(Math.abs(corr-0.0) > 0.00001) {
+                        DataBag db = new DataBag(battery, pTemp, corr, wTemp);
+                        this.corrected.put(p_rs.getString("moment"), db);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -816,62 +772,18 @@ public class Report {
 
     // SEND BY FTP
 
-    private byte[] formatAsJson() {
+    public String toJson() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("  \"head\": {");
-        sb.append("    \"transaction\": 0,");
-        sb.append("    \"signature\": 19382,");
-        sb.append("    \"environment\": {");
-        sb.append("      \"station_name\": \"23092\",");
-        sb.append("      \"table_name\": \"Data_5_Min_2\",");
-        sb.append("      \"model\": \"CR300\",");
-        sb.append("      \"serial_no\": \"23092\",");
-        sb.append("      \"os_version\": \"CR300.Std.10.02\",");
-        sb.append("      \"prog_name\": \"CPU:486_St-Andre-Avellin_5 minutes.cr300\"");
-        sb.append("    },");
-        sb.append("    \"fields\": [");
-        sb.append("      {");
-        sb.append("        \"name\": \"Batt_volt_Min\",");
-        sb.append("        \"type\": \"xsd:float\",");
-        sb.append("        \"process\": \"Min\",");
-        sb.append("        \"settable\": false");
-        sb.append("      },");
-        sb.append("      {");
-        sb.append("        \"name\": \"PTemp\",");
-        sb.append("        \"type\": \"xsd:float\",");
-        sb.append("        \"process\": \"Smp\",");
-        sb.append("        \"settable\": false");
-        sb.append("      },");
-        sb.append("      {");
-        sb.append("        \"name\": \"RLS_Water_Level\",");
-        sb.append("        \"type\": \"xsd:float\",");
-        sb.append("        \"units\": \"M\",");
-        sb.append("        \"process\": \"Smp\",");
-        sb.append("        \"settable\": false");
-        sb.append("      },");
-        sb.append("      {");
-        sb.append("        \"name\": \"Water_Temp\",");
-        sb.append("        \"type\": \"xsd:float\",");
-        sb.append("        \"units\": \"Degrees C\",");
-        sb.append("        \"process\": \"Smp\",");
-        sb.append("        \"settable\": false");
-        sb.append("      }");
-        sb.append("    ]");
-        sb.append("  },");
-        sb.append("  \"data\": [");
-        sb.append("    {");
-        sb.append("      \"time\": \"2021-06-04T11:20:00\",");
-        sb.append("      \"vals\": [");
-        sb.append("        13.49,");
-        sb.append("        32.44,");
-        sb.append("        151.825,");
-        sb.append("        17.6");
-        sb.append("      ]");
-        sb.append("    }");
-        sb.append("  ]");
-        sb.append("}");
-        return sb.toString().getBytes();
+        sb.append("{\"head\":{\"transaction\":0,\"signature\":0,\"environment\":{\"station_name\":\"a\",\"table_name\":\"a\",\"model\":\"a\",\"serial_no\":\"a\",\"os_version\":\"a\",\"prog_name\":\"a\"},\"fields\":[{\"name\":\"Batt_volt_Min\",\"type\":\"xsd:float\",\"process\":\"Min\",\"settable\":false},{\"name\":\"PTemp\",\"type\":\"xsd:float\",\"process\":\"Smp\",\"settable\":false},{\"name\":\"RLS_Water_Level\",\"type\":\"xsd:float\",\"units\":\"M\",\"process\":\"Smp\",\"settable\":false},{\"name\":\"Water_Temp\",\"type\":\"xsd:float\",\"units\":\"Degrees C\",\"process\":\"Smp\",\"settable\":false}]},\"data\":[");
+        for(Map.Entry<String, DataBag> entry : corrected.entrySet()) {
+            String moment = entry.getKey();
+            DataBag db = entry.getValue();
+            sb.append(db.toJson(moment));
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        sb.append("]}");
+        return sb.toString();
     }
 
     /**
@@ -883,11 +795,12 @@ public class Report {
         try (PreparedStatement stmt = conn.prepareStatement("SELECT hm_id FROM water_stations WHERE gid=(SELECT station FROM water_stations_levelsender WHERE levelsender=?)")) {
             stmt.setInt(1, station);
             ResultSet rs = stmt.executeQuery();
+            rs.next();
             int hm_id = rs.getInt("hm_id");
-            byte[] bytes = formatAsJson();
+            byte[] bytes = toJson().getBytes();
             Date today = new Date();
             DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
-            String ftpUrl = String.format("ftp://%s:%s@soshydro.net:21/testftp/%d.%s.dat",
+            String ftpUrl = String.format("ftp://%s:%s@soshydro.net:21/%d.%s.dat",
                     Private.getFtpUser(), Private.getFtpPassword(),
                     hm_id, df.format(today));
             URLConnection urlConnection = new URL(ftpUrl).openConnection();

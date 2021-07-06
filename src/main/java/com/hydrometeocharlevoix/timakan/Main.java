@@ -89,6 +89,7 @@ public class Main {
                         Report report = new Report(message);
                         logger.info(report.toString());
                         report.insertIntoDb(conn);
+                        report.sendByFtp(conn);
                         message.setFlag(Flags.Flag.DELETED, true);
                     } catch (BadSensorConfiguration bsce) {
                         logger.error("Bad sensor config, sending warning email with report copy");

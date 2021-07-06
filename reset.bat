@@ -9,8 +9,8 @@ IF "%CD:~0,1%" == "C" (
 	set filename=C:\Users\megha\Documents\Timakan\timakan%datestamp%.backup
 ) ELSE (
 	D:
-	cd D:\Programmes\Postgres\12\bin
-	set filename=D:\megha\Documents\Timakan\timakan%datestamp%.backup
+	cd D:\Programmes\Postgres\13\bin
+	set filename=D:\megha\Documents\Projects\Timakan\timakan%datestamp%.backup
 )
 
 pg_restore.exe -U postgres -d postgres --clean --create %filename%
