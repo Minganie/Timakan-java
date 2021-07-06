@@ -28,3 +28,6 @@ h2 {
     margin: 0 1em 1em 1em;
     color: #1d6b6e;
 }
+div.battery {
+    padding: 0 1rem;
+}

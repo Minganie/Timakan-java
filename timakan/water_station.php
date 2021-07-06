@@ -17,7 +17,13 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
     try {
         $dbh = new PDO('pgsql:host=localhost;dbname=timakan', $USER, $PW);
         if($dbh) {
-            $info_sql = "SELECT * FROM water_stations WHERE gid=$serial";
+            $info_sql = "SELECT ws.gid, ws.name, ws.monitoring, ws.overflow, ws.historical, ws.hist_ref, em.sent, em.battery, em.ll_battery, em.pl_battery
+FROM water_stations as ws
+	LEFT JOIN (
+		SELECT to_char(sent AT TIME ZONE 'America/Montreal', 'YYYY-MM-DD HH24:MI:SS') as sent, battery, ll_battery, pl_battery, station
+		FROM emails WHERE station=$serial ORDER BY sent DESC LIMIT 1
+	) em ON ws.gid=em.station
+WHERE gid=$serial";
             $stmt = $dbh->prepare($info_sql);
             $i = 0;
             if ($stmt->execute()) {
@@ -37,6 +43,12 @@ if(isset($_GET['station']) && !empty($_GET['station'])) {
 ?>
   <body>
   <h1><?php echo $info['name']; ?></h1>
+  <h2>Batterie (<?php echo $info['sent']; ?>)</h2>
+  <div class="battery">
+    <p>LevelSender: <?php echo $info['battery'] ?>%</p>
+    <p>Levelogger: <?php echo $info['ll_battery'] ?>%</p>
+    <p>Barologger: <?php echo $info['pl_battery'] ?>%</p>
+  </div>
   <div id="graph_week" class="timakan_chart"></div>
   <div id="graph_year" class="timakan_chart"></div>
   <div id="graph_all" class="timakan_chart"></div>
