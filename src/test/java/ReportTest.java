@@ -30,26 +30,26 @@ class ReportTest {
                 "LevelSender\n" +
                 "Serial: 284269\n" +
                 "Location: Gouffre-Pont-362\n" +
-                "Battery: 69%\n" +
-                "Sample Rate: 6 hours\n" +
-                "Report Rate: 24 hours\n" +
-                "State: reporting \n" +
-                "Start Report: 14/06/2021 12:00:00\n" +
+                "Battery: 93%\n" +
+                "Sample Rate: 2 hours\n" +
+                "Report Rate: 6 hours\n" +
+                "State: reporting\n" +
+                "Start Report: 22/07/2021 10:00:00\n" +
                 "\n" +
                 "Logger 1\n" +
-                "Location: \n" +
+                "Location:\n" +
                 "Type: Levelogger Edge, M10, 3.0040\n" +
                 "Serial: 2082616\n" +
                 "Battery: 97%\n" +
-                "Total Logs: 40000 of 40000\n" +
+                "Total Logs: 1 of 40000\n" +
                 "Log Rate: 60 seconds\n" +
                 "Memory Mode: continuous\n" +
                 "Log Type: linear\n" +
                 "State: stopped\n" +
-                "Start Logger: 23/07/2018 13:42:29\n" +
+                "Start Logger: 22/07/2021 08:58:46\n" +
                 "\n" +
                 "Logger 2\n" +
-                "Location: \n" +
+                "Location:\n" +
                 "Type: Barologger Edge, M1.5, 3.0040\n" +
                 "Serial: 2086251\n" +
                 "Battery: 99%\n" +
@@ -63,20 +63,18 @@ class ReportTest {
                 "\n" +
                 "Logger 1 Samples\n" +
                 "Time, Temperature( C), Level(m)\n" +
-                "04/07/2021 12:00:00, 15.7080, 0.9609  \n" +
-                "04/07/2021 18:00:00, 18.5590, 0.8129  \n" +
-                "05/07/2021 00:00:00, 17.2900, 1.0402  \n" +
-                "05/07/2021 06:00:00, 15.5830, 0.8007  \n" +
+                "26/07/2021 04:00:00, 17.5510, 10.9967\n" +
+                "26/07/2021 06:00:00, 17.5010, 12.8066\n" +
+                "26/07/2021 08:00:00, 15.5400, 12.2875\n" +
                 "\n" +
                 "Logger 2 Samples\n" +
                 "Time, Temperature( C), Level(kPa)\n" +
-                "04/07/2021 12:00:00, 19.8864, 101.489  \n" +
-                "04/07/2021 18:00:00, 19.5130, 101.406  \n" +
-                "05/07/2021 00:00:00, 14.5354, 101.501  \n" +
-                "05/07/2021 06:00:00, 10.9689, 101.493  \n" +
+                "26/07/2021 04:00:00, 16.4565, 100.671\n" +
+                "26/07/2021 06:00:00, 16.5667, 100.721\n" +
+                "26/07/2021 08:00:00, 19.2626, 100.753\n" +
                 "\n" +
-                "MESSAGES: Email report 21, LS reporting, L1 stopped, L2 stopped, \n" +
-                "\n" +
+                "MESSAGES: Email report 16, LS reporting, L1 stopped, L2 stopped,\n" +
+                "\n"+
                 "\n";
     }
     @AfterAll
